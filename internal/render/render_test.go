@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -368,6 +369,42 @@ func TestRenderEgress(t *testing.T) {
 		cm := toYAML(t, []*Object{mustFind(t, b.System, "ConfigMap", "atenet-egress")})
 		if strings.Count(cm, "cluster_name: additional_egress_ext_proc") != 3 || !strings.Contains(cm, "address: authz.policy.svc.cluster.local") {
 			t.Error("ext_proc filter and cluster not spliced into the egress config")
+		}
+	})
+	t.Run("trusted CA bundle", func(t *testing.T) {
+		if cm := toYAML(t, []*Object{mustFind(t, mustRender(t, baseSpec(), nil).System, "ConfigMap", "atenet-egress")}); strings.Contains(cm, egressTrustSecret) {
+			t.Error("egress config trusts a bundle with none set")
+		}
+		for _, src := range []v1alpha1.TrustedCASource{
+			{ConfigMap: &v1alpha1.KeyReference{Name: "corp-roots"}},
+			{Secret: &v1alpha1.KeyReference{Name: "corp-roots", Key: "bundle.pem"}},
+		} {
+			spec := baseSpec()
+			spec.Atenet.EgressTrustedCABundle = &src
+			b := mustRender(t, spec, nil)
+			cm := mustFind(t, b.System, "ConfigMap", "atenet-egress")
+			envoy, _, _ := unstructured.NestedString(cm.Object, "data", "envoy.yaml")
+			if strings.Contains(envoy, "/etc/ssl/certs/ca-certificates.crt") || strings.Count(envoy, "name: "+egressTrustSecret) != 2 {
+				t.Error("re-originating clusters do not trust the bundle over SDS")
+			}
+			if sds, _, _ := unstructured.NestedString(cm.Object, "data", egressTrustSDS); !strings.Contains(sds, "watched_directory: { path: "+egressTrustDir+" }") {
+				t.Error("bundle SDS resource is not watched")
+			}
+
+			dep := mustFind(t, b.System, "Deployment", "atenet-egress")
+			if !strings.Contains(toYAML(t, []*Object{{Object: container(t, dep, "containers", "envoy")}}), "mountPath: "+egressTrustDir) {
+				t.Error("envoy does not mount the bundle")
+			}
+			volumes, _, _ := unstructured.NestedSlice(dep.Object, append(append([]string{}, podSpecPath...), "volumes")...)
+			want := map[string]any{"name": "egress-trusted-ca"}
+			if src.ConfigMap != nil {
+				want["configMap"] = map[string]any{"name": "corp-roots", "items": []any{map[string]any{"key": "ca.crt", "path": "ca.crt"}}}
+			} else {
+				want["secret"] = map[string]any{"secretName": "corp-roots", "items": []any{map[string]any{"key": "bundle.pem", "path": "ca.crt"}}}
+			}
+			if !slices.ContainsFunc(volumes, func(v any) bool { return reflect.DeepEqual(v, want) }) {
+				t.Errorf("atenet-egress has no volume %v", want)
+			}
 		}
 	})
 }

@@ -286,6 +286,35 @@ type AtenetSpec struct {
 	// spiffe://cluster.local/ns/<namespace>/sa/<service-account>.
 	// +optional
 	IngressAllowedSPIFFEIDs []string `json:"ingressAllowedSPIFFEIDs,omitempty"`
+
+	// EgressTrustedCABundle replaces the public roots the egress gateway
+	// trusts when it re-originates the TLS it terminates, for origins with
+	// certificates from a private CA. It is one PEM bundle holding every CA
+	// to trust: include the public roots in it to keep reaching public
+	// origins, as a trust-manager Bundle with useDefaultCAs does. Envoy
+	// reloads it when it changes.
+	// +optional
+	EgressTrustedCABundle *TrustedCASource `json:"egressTrustedCABundle,omitempty"`
+}
+
+// TrustedCASource is a key of a ConfigMap or Secret in ate-system holding
+// one or more PEM certificates.
+//
+// +kubebuilder:validation:XValidation:rule="has(self.configMap) != has(self.secret)",message="set exactly one of configMap or secret"
+type TrustedCASource struct {
+	// +optional
+	ConfigMap *KeyReference `json:"configMap,omitempty"`
+	// +optional
+	Secret *KeyReference `json:"secret,omitempty"`
+}
+
+// KeyReference names a key of an object in ate-system.
+type KeyReference struct {
+	// +kubebuilder:validation:MinLength=1
+	Name string `json:"name"`
+	// Key defaults to ca.crt.
+	// +optional
+	Key string `json:"key,omitempty"`
 }
 
 // CredentialProviderSpec is upstream's --credential-provider: name k8s.io

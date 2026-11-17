@@ -455,12 +455,18 @@ func (r *renderer) system(in Inputs) (objs, createOnly []*Object, err error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	if raw, err = patchEgress(raw, r.spec.Atenet.AdditionalEgressExtprocService, p); err != nil {
+	trusted := r.spec.Atenet.EgressTrustedCABundle
+	if raw, err = patchEgress(raw, r.spec.Atenet.AdditionalEgressExtprocService, p, trusted != nil); err != nil {
 		return nil, nil, err
 	}
 	egress, err := r.finish(raw, true)
 	if err != nil {
 		return nil, nil, err
+	}
+	if trusted != nil {
+		if err := addEgressTrust(egress, trusted); err != nil {
+			return nil, nil, err
+		}
 	}
 	objs = append(objs, egress...)
 

@@ -110,6 +110,7 @@ upstream's `install.ate.dev/v1alpha1` install document where one exists. See
 | `postgres.storageClassName` | cluster default | StorageClass of the bundled PostgreSQL volume. |
 | `atenet.credentialProvider` | required | `{name: k8s.io}` deploys the bundled Kubernetes Secrets provider. `{enabled: false}` turns credential injection off. `{name, address}` points at a provider you deploy. |
 | `atenet.additionalEgressExtprocService` | | `NAMESPACE/SERVICE:PORT` of an ext_proc authorization filter for the egress gateway. |
+| `atenet.egressTrustedCABundle` | | `{configMap: {name, key}}` or `{secret: {name, key}}` in `ate-system` (`key` defaults to `ca.crt`): one PEM bundle that replaces the public roots the egress gateway trusts when it re-originates TLS to an origin. Include the public roots to keep reaching public origins, e.g. a trust-manager `Bundle` with `useDefaultCAs: true`. Envoy reloads it in place. |
 | `atenet.ingressAllowedSPIFFEIDs` | none | SPIFFE IDs of the clients the ingress router lets reach actors. Unset, no client may. `kubectl ate proxy` dials as `spiffe://cluster.local/ns/ate-system/sa/atenet-client`. |
 | `apiServer.expectedJWTIssuer` | discovered | Service account token issuer ate-api-server trusts. Without it the operator derives the issuer from `gcp`, else reads the cluster's OpenID discovery document, else uses `https://kubernetes.default.svc`. |
 | `apiServer.authenticationConfig` | generated | Replaces `authentication.yaml`, for installs that trust more JWT providers. |

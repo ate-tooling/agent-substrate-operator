@@ -157,6 +157,43 @@ spec:
                         && !has(self.address)) : has(self.name)'
                     - message: a provider other than k8s.io needs an address
                       rule: '!has(self.name) || self.name == ''k8s.io'' || has(self.address)'
+                  egressTrustedCABundle:
+                    description: |-
+                      EgressTrustedCABundle replaces the public roots the egress gateway
+                      trusts when it re-originates the TLS it terminates, for origins with
+                      certificates from a private CA. It is one PEM bundle holding every CA
+                      to trust: include the public roots in it to keep reaching public
+                      origins, as a trust-manager Bundle with useDefaultCAs does. Envoy
+                      reloads it when it changes.
+                    properties:
+                      configMap:
+                        description: KeyReference names a key of an object in ate-system.
+                        properties:
+                          key:
+                            description: Key defaults to ca.crt.
+                            type: string
+                          name:
+                            minLength: 1
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      secret:
+                        description: KeyReference names a key of an object in ate-system.
+                        properties:
+                          key:
+                            description: Key defaults to ca.crt.
+                            type: string
+                          name:
+                            minLength: 1
+                            type: string
+                        required:
+                        - name
+                        type: object
+                    type: object
+                    x-kubernetes-validations:
+                    - message: set exactly one of configMap or secret
+                      rule: has(self.configMap) != has(self.secret)
                   ingressAllowedSPIFFEIDs:
                     description: |-
                       IngressAllowedSPIFFEIDs are the SPIFFE IDs of the clients the ingress

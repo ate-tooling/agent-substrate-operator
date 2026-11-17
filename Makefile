@@ -32,6 +32,37 @@ lint:
 vulncheck:
 	$(GOVULNCHECK) ./...
 
+KIND ?= go run sigs.k8s.io/kind@v0.33.0
+KIND_CLUSTER_NAME ?= substrate
+
+.PHONY: kind-create
+kind-create: ## Create a kind cluster with the feature gates Substrate needs and a registry on localhost:5001.
+	KIND="$(KIND)" KIND_CLUSTER_NAME=$(KIND_CLUSTER_NAME) hack/create-kind-cluster.sh
+
+KIND_IMG_REPO ?= localhost:5001/agent-substrate-operator
+KIND_IMG_TAG ?= dev
+KIND_CONTEXT := kind-$(KIND_CLUSTER_NAME)
+
+# The docker driver's builder, named after the docker context, is used because
+# a docker-container builder cannot push to the registry on localhost:5001. The
+# tag does not change between builds, so the rollout restart pulls the new image.
+.PHONY: kind-install
+kind-install: ## Build the operator into the kind registry, install the chart, and create examples/kind.yaml.
+	docker buildx build --builder "$$(docker context show)" --platform linux/$$(go env GOARCH) \
+		--load -t $(KIND_IMG_REPO):$(KIND_IMG_TAG) .
+	docker push $(KIND_IMG_REPO):$(KIND_IMG_TAG)
+	helm --kube-context $(KIND_CONTEXT) upgrade --install substrate-operator $(CHART) \
+		--namespace substrate-operator --create-namespace --wait \
+		--set image.repository=$(KIND_IMG_REPO) --set image.tag=$(KIND_IMG_TAG) --set image.pullPolicy=Always
+	kubectl --context $(KIND_CONTEXT) -n substrate-operator rollout restart deploy/substrate-operator
+	kubectl --context $(KIND_CONTEXT) -n substrate-operator rollout status deploy/substrate-operator --timeout=5m
+	kubectl --context $(KIND_CONTEXT) apply -f examples/kind.yaml
+	kubectl --context $(KIND_CONTEXT) wait substrateinstall/substrate --for=condition=Ready --timeout=20m
+
+.PHONY: kind-delete
+kind-delete: ## Delete the kind cluster, and the registry if kind-create started it.
+	KIND="$(KIND)" KIND_CLUSTER_NAME=$(KIND_CLUSTER_NAME) hack/delete-kind-cluster.sh
+
 .PHONY: e2e
 e2e: ## Install through the chart on a fresh kind cluster and run the counter demo; needs UPSTREAM.
 	hack/e2e-kind.sh "$(UPSTREAM)"

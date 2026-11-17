@@ -6,9 +6,9 @@
 #
 #   hack/e2e-kind.sh <upstream checkout>
 #
-# The cluster is made with upstream's hack/create-kind-cluster.sh at the
-# embedded release, with the feature gates Substrate needs and a registry on
-# localhost:5001. Substrate's images come from SUBSTRATE_IMAGES (default
+# The cluster is made with hack/create-kind-cluster.sh, copied from upstream,
+# with the feature gates Substrate needs and a registry on localhost:5001.
+# Substrate's images come from SUBSTRATE_IMAGES (default
 # ghcr.io/samueltorres/substrate); if that repository has no images for the
 # release, they are built into the kind registry instead.
 #
@@ -51,7 +51,7 @@ cleanup() {
     diagnostics || true
   fi
   if [[ "${KEEP_CLUSTER:-}" != "1" ]]; then
-    (cd "${work}/upstream" && KIND_CLUSTER_NAME="${cluster}" hack/delete-kind-cluster.sh) >/dev/null 2>&1 || true
+    KIND_CLUSTER_NAME="${cluster}" "${root}/hack/delete-kind-cluster.sh" >/dev/null 2>&1 || true
   fi
   rm -rf "${work}"
   exit "${status}"
@@ -74,11 +74,11 @@ diagnostics() {
 step "extracting upstream ${version}"
 mkdir "${work}/upstream"
 git -C "${upstream}" archive "${version}" | tar -x -C "${work}/upstream"
-# Upstream's hack/kind.sh finds its tools from the git root.
+# Upstream's tools find each other from the git root.
 git -C "${work}/upstream" init -q
 
 step "creating kind cluster ${cluster}"
-(cd "${work}/upstream" && KIND_CLUSTER_NAME="${cluster}" hack/create-kind-cluster.sh)
+KIND_CLUSTER_NAME="${cluster}" "${root}/hack/create-kind-cluster.sh"
 
 if ! docker buildx imagetools inspect "${images}/ateapi:${version}" >/dev/null 2>&1; then
   step "no ${version} images in ${images}; building them into the kind registry"

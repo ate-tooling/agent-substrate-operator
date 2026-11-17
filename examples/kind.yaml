@@ -11,4 +11,7 @@ spec:
   atenet:
     credentialProvider:
       name: k8s.io
+    # kubectl ate proxy dials the router as this service account.
+    ingressAllowedSPIFFEIDs:
+    - spiffe://cluster.local/ns/ate-system/sa/atenet-client
   deletionPolicy: Delete

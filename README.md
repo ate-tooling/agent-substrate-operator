@@ -91,7 +91,8 @@ helm uninstall substrate-operator -n substrate-operator
 The resource must be named `substrate`, because the upstream manifests name
 `ate-system` literally, so a cluster holds one install. Field names follow
 upstream's `install.ate.dev/v1alpha1` install document where one exists. See
-[`examples/`](examples) for kind, generic S3, EKS, and GKE with Cloud SQL.
+[`examples/`](examples) for kind, generic S3, EKS, and GKE with Cloud SQL, and
+[`examples/hello-actor`](examples/hello-actor) for an actor to check an install with.
 
 | Field | Default | Meaning |
 |---|---|---|
@@ -195,6 +196,9 @@ make generate   # deepcopy, CRD, and RBAC from the API types
 make test       # unit tests, and controller tests against an envtest API server
 make lint       # go vet, gofmt, helm lint
 make run        # run the operator against the current kubeconfig context
+make kind-create  # kind cluster "substrate" with Substrate's feature gates and a registry on localhost:5001
+make kind-install # build the operator into the kind registry, install the chart, and wait for examples/kind.yaml to be Ready
+make kind-delete  # delete it, and the registry if kind-create started it
 ```
 
 ### Updating to a new Agent Substrate release
@@ -218,8 +222,8 @@ internal/render/      spec -> objects: kustomize builds, image rewriting, platfo
 internal/pki/         CA and JWT pool generation, copied from upstream
 internal/controller/  the reconciler: apply order, waits, Postgres setup, prune, teardown
 charts/               the operator's Helm chart and CRD
-examples/             SubstrateInstall examples
-hack/                 upstream sync and image publishing
+examples/             SubstrateInstall examples, and a hello actor
+hack/                 upstream sync, image publishing, and the kind cluster scripts (copied from upstream)
 ```
 
 Code copied from upstream keeps its Apache-2.0 header. Upstream's LICENSE is

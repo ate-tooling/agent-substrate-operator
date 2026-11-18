@@ -161,7 +161,50 @@ func (r *Reconciler) inputs(ctx context.Context, spec v1alpha1.SubstrateInstallS
 		}
 		in.ExternalPostgres = s.Data
 	}
+	if src := spec.Atelet.RegistryTrustedCABundle; src != nil {
+		bundle, err := r.trustedCA(ctx, src)
+		if err != nil {
+			return in, fmt.Errorf("while reading atelet.registryTrustedCABundle: %w", err)
+		}
+		in.AteletTrustedCA = bundle
+	}
 	return in, nil
+}
+
+// trustedCA reads the bundle src names.
+func (r *Reconciler) trustedCA(ctx context.Context, src *v1alpha1.TrustedCASource) ([]byte, error) {
+	if ref := src.ConfigMap; ref != nil {
+		cm := &corev1.ConfigMap{}
+		if err := r.APIReader.Get(ctx, client.ObjectKey{Namespace: render.Namespace, Name: ref.Name}, cm); err != nil {
+			return nil, err
+		}
+		if v, ok := cm.Data[keyOrDefault(ref.Key)]; ok {
+			return []byte(v), nil
+		}
+		if v, ok := cm.BinaryData[keyOrDefault(ref.Key)]; ok {
+			return v, nil
+		}
+		return nil, fmt.Errorf("configMap %s has no key %s", ref.Name, keyOrDefault(ref.Key))
+	}
+	if ref := src.Secret; ref != nil {
+		s := &corev1.Secret{}
+		if err := r.APIReader.Get(ctx, client.ObjectKey{Namespace: render.Namespace, Name: ref.Name}, s); err != nil {
+			return nil, err
+		}
+		if v, ok := s.Data[keyOrDefault(ref.Key)]; ok {
+			return v, nil
+		}
+		return nil, fmt.Errorf("secret %s has no key %s", ref.Name, keyOrDefault(ref.Key))
+	}
+	return nil, fmt.Errorf("set a configMap or secret")
+}
+
+// keyOrDefault is a KeyReference's key, ca.crt when unset.
+func keyOrDefault(key string) string {
+	if key == "" {
+		return "ca.crt"
+	}
+	return key
 }
 
 // issuer determines the service account token issuer ate-api-server trusts:

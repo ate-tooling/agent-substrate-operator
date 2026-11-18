@@ -124,6 +124,45 @@ spec:
                     - error
                     type: string
                 type: object
+              atelet:
+                description: Atelet configures the node agent.
+                properties:
+                  registryTrustedCABundle:
+                    description: |-
+                      RegistryTrustedCABundle adds CAs to the roots atelet trusts when it
+                      pulls actor images, for registries with certificates from a private
+                      CA. The image's public roots stay trusted. atelet reads its roots once
+                      at startup, so the operator rolls it when the bundle changes.
+                    properties:
+                      configMap:
+                        description: KeyReference names a key of an object in ate-system.
+                        properties:
+                          key:
+                            description: Key defaults to ca.crt.
+                            type: string
+                          name:
+                            minLength: 1
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      secret:
+                        description: KeyReference names a key of an object in ate-system.
+                        properties:
+                          key:
+                            description: Key defaults to ca.crt.
+                            type: string
+                          name:
+                            minLength: 1
+                            type: string
+                        required:
+                        - name
+                        type: object
+                    type: object
+                    x-kubernetes-validations:
+                    - message: set exactly one of configMap or secret
+                      rule: has(self.configMap) != has(self.secret)
+                type: object
               atenet:
                 description: Atenet configures the ingress router and egress gateway.
                 properties:

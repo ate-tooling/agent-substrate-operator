@@ -73,6 +73,9 @@ type Inputs struct {
 	// ExternalPostgres is the data of the Secret
 	// spec.postgres.connectionSecretName names.
 	ExternalPostgres map[string][]byte
+	// AteletTrustedCA is the bundle spec.atelet.registryTrustedCABundle
+	// names.
+	AteletTrustedCA []byte
 }
 
 // Bundle is the rendered install, in the order the stages are applied.
@@ -469,6 +472,12 @@ func (r *renderer) system(in Inputs) (objs, createOnly []*Object, err error) {
 		}
 	}
 	objs = append(objs, egress...)
+
+	if src := r.spec.Atelet.RegistryTrustedCABundle; src != nil {
+		if err := addAteletTrust(objs, src, in.AteletTrustedCA); err != nil {
+			return nil, nil, err
+		}
+	}
 
 	if err := r.platform(objs); err != nil {
 		return nil, nil, err

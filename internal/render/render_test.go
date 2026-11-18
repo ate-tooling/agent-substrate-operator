@@ -409,6 +409,61 @@ func TestRenderEgress(t *testing.T) {
 	})
 }
 
+func TestAteletRegistryTrust(t *testing.T) {
+	ds := mustFind(t, mustRender(t, baseSpec(), nil).System, "DaemonSet", "atelet")
+	if strings.Contains(toYAML(t, []*Object{ds}), "SSL_CERT_DIR") {
+		t.Error("atelet trusts a bundle with none set")
+	}
+
+	render := func(src v1alpha1.TrustedCASource, platform v1alpha1.Platform, bundle string) *Object {
+		spec := baseSpec()
+		spec.Platform = platform
+		switch platform {
+		case v1alpha1.PlatformGKE:
+			spec.Storage = gcsStorage()
+		case v1alpha1.PlatformKind:
+			spec.Storage = v1alpha1.StorageSpec{}
+		}
+		spec.Atelet.RegistryTrustedCABundle = &src
+		b, err := Render(Inputs{Spec: WithDefaults(spec), Issuer: InClusterIssuer, AteletTrustedCA: []byte(bundle)})
+		if err != nil {
+			t.Fatalf("Render: %v", err)
+		}
+		return mustFind(t, b.System, "DaemonSet", "atelet")
+	}
+	for _, platform := range []v1alpha1.Platform{v1alpha1.PlatformGeneric, v1alpha1.PlatformGKE, v1alpha1.PlatformEKS, v1alpha1.PlatformKind} {
+		for _, src := range []v1alpha1.TrustedCASource{
+			{ConfigMap: &v1alpha1.KeyReference{Name: "corp-roots"}},
+			{Secret: &v1alpha1.KeyReference{Name: "corp-roots", Key: "bundle.pem"}},
+		} {
+			ds := render(src, platform, "pem")
+			c := toYAML(t, []*Object{{Object: container(t, ds, "containers", "atelet")}})
+			if !strings.Contains(c, "value: "+ateletCertDirs) || !strings.Contains(c, "mountPath: "+ateletTrustDir) {
+				t.Errorf("%s: atelet does not trust the bundle", platform)
+			}
+			volumes, _, _ := unstructured.NestedSlice(ds.Object, append(append([]string{}, podSpecPath...), "volumes")...)
+			want := map[string]any{"name": "registry-trusted-ca"}
+			if src.ConfigMap != nil {
+				want["configMap"] = map[string]any{"name": "corp-roots", "items": []any{map[string]any{"key": "ca.crt", "path": "ca.crt"}}}
+			} else {
+				want["secret"] = map[string]any{"secretName": "corp-roots", "items": []any{map[string]any{"key": "bundle.pem", "path": "ca.crt"}}}
+			}
+			if !slices.ContainsFunc(volumes, func(v any) bool { return reflect.DeepEqual(v, want) }) {
+				t.Errorf("%s: atelet has no volume %v", platform, want)
+			}
+		}
+	}
+
+	hash := func(bundle string) string {
+		ds := render(v1alpha1.TrustedCASource{ConfigMap: &v1alpha1.KeyReference{Name: "corp-roots"}}, v1alpha1.PlatformGeneric, bundle)
+		h, _, _ := unstructured.NestedString(ds.Object, "spec", "template", "metadata", "annotations", AnnotationRegistryCAHash)
+		return h
+	}
+	if a, b := hash("one"), hash("two"); a == "" || a == b {
+		t.Error("atelet's pod template does not follow the bundle")
+	}
+}
+
 func TestConfigHashFollowsConfig(t *testing.T) {
 	hash := func(spec v1alpha1.SubstrateInstallSpec) string {
 		dep := mustFind(t, mustRender(t, spec, nil).System, "Deployment", "ate-api-server")

@@ -129,19 +129,10 @@ func repointOriginTrust(raw []byte) ([]byte, error) {
 // ConfigMap and mounts the bundle into Envoy. It mounts the whole volume, not
 // a subPath, so the kubelet's updates reach Envoy.
 func addEgressTrust(objs []*Object, src *v1alpha1.TrustedCASource) error {
-	ref, volume := src.ConfigMap, map[string]any{}
-	if ref != nil {
-		volume["configMap"] = map[string]any{"name": ref.Name}
-	} else if ref = src.Secret; ref != nil {
-		volume["secret"] = map[string]any{"secretName": ref.Name}
+	volume, err := trustedCAVolume(src, "egress-trusted-ca", "atenet.egressTrustedCABundle")
+	if err != nil {
+		return err
 	}
-	if ref == nil || ref.Name == "" {
-		return fmt.Errorf("atenet.egressTrustedCABundle needs a configMap or secret name")
-	}
-	for _, v := range volume {
-		v.(map[string]any)["items"] = []any{map[string]any{"key": orDefault(ref.Key, "ca.crt"), "path": "ca.crt"}}
-	}
-	volume["name"] = "egress-trusted-ca"
 
 	cm, err := find(objs, "ConfigMap", "atenet-egress")
 	if err != nil {

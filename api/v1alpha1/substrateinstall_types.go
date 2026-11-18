@@ -94,6 +94,10 @@ type SubstrateInstallSpec struct {
 	// +optional
 	APIServer APIServerSpec `json:"apiServer,omitzero"`
 
+	// Atelet configures the node agent.
+	// +optional
+	Atelet AteletSpec `json:"atelet,omitzero"`
+
 	// ActorJWT configures the actor identity JWTs the egress gateway mints.
 	// +optional
 	ActorJWT ActorJWTSpec `json:"actorJWT,omitzero"`
@@ -295,6 +299,16 @@ type AtenetSpec struct {
 	// reloads it when it changes.
 	// +optional
 	EgressTrustedCABundle *TrustedCASource `json:"egressTrustedCABundle,omitempty"`
+}
+
+// AteletSpec configures the node agent.
+type AteletSpec struct {
+	// RegistryTrustedCABundle adds CAs to the roots atelet trusts when it
+	// pulls actor images, for registries with certificates from a private
+	// CA. The image's public roots stay trusted. atelet reads its roots once
+	// at startup, so the operator rolls it when the bundle changes.
+	// +optional
+	RegistryTrustedCABundle *TrustedCASource `json:"registryTrustedCABundle,omitempty"`
 }
 
 // TrustedCASource is a key of a ConfigMap or Secret in ate-system holding

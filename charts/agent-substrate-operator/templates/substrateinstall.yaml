@@ -1,5 +1,5 @@
 {{- if .Values.substrateInstall.enabled }}
-apiVersion: substrate.samueltorres.github.io/v1alpha1
+apiVersion: substrate.ate-tooling.github.io/v1alpha1
 kind: SubstrateInstall
 metadata:
   name: substrate

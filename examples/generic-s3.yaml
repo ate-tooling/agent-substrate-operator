@@ -2,7 +2,7 @@
 # and PodCertificateRequest feature gates and certificates.k8s.io/v1beta1 on.
 # Snapshots go to an S3 bucket; the bundled PostgreSQL holds the control plane
 # state.
-apiVersion: substrate.samueltorres.github.io/v1alpha1
+apiVersion: substrate.ate-tooling.github.io/v1alpha1
 kind: SubstrateInstall
 metadata:
   name: substrate

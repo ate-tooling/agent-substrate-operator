@@ -9,8 +9,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/samueltorres/agent-substrate-operator/internal/pki"
-	"github.com/samueltorres/agent-substrate-operator/internal/render"
+	"github.com/ate-tooling/agent-substrate-operator/internal/pki"
+	"github.com/ate-tooling/agent-substrate-operator/internal/render"
 )
 
 // Pool Secrets the control plane reads, as upstream's installer names them.

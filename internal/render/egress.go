@@ -23,7 +23,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
 )
 
 // credentialProvider is the provider the egress gateway asks for credentials.

@@ -13,8 +13,8 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/yaml"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
-	"github.com/samueltorres/agent-substrate-operator/internal/upstream"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/internal/upstream"
 )
 
 // Namespaces the upstream manifests name literally.
@@ -27,19 +27,19 @@ const (
 const (
 	// LabelInstall marks every object the operator applies, so it can find
 	// and prune them.
-	LabelInstall = "substrate.samueltorres.github.io/install"
+	LabelInstall = "substrate.ate-tooling.github.io/install"
 	// LabelManagedBy is the standard managed-by label.
 	LabelManagedBy = "app.kubernetes.io/managed-by"
 	// ManagedBy is LabelManagedBy's value.
 	ManagedBy = "agent-substrate-operator"
 	// AnnotationConfigHash on a pod template digests the rendered ConfigMaps
 	// and Secrets the pods read, so a change to them rolls the pods.
-	AnnotationConfigHash = "substrate.samueltorres.github.io/config-hash"
+	AnnotationConfigHash = "substrate.ate-tooling.github.io/config-hash"
 )
 
 // DefaultImageRepository is where this project's CI publishes the Substrate
 // images: rebuilds of the embedded upstream release, which publishes none.
-const DefaultImageRepository = "ghcr.io/samueltorres/substrate"
+const DefaultImageRepository = "ghcr.io/ate-tooling/substrate"
 
 // DefaultActorJWTIssuer is upstream's default iss claim for actor JWTs, the
 // in-cluster address of ate-idp-server's Service.

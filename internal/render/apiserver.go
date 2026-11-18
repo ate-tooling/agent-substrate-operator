@@ -6,7 +6,7 @@ import (
 	"maps"
 	"strings"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
 )
 
 // Names of the ate-api-server configuration objects, as upstream's installer

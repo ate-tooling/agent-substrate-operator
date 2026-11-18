@@ -7,7 +7,7 @@
 # ecr-credential-provider. It runs under atelet's credentials: the role below
 # when IRSA is set, else the node role through the instance metadata service.
 # Either needs ECR pull permissions.
-apiVersion: substrate.samueltorres.github.io/v1alpha1
+apiVersion: substrate.ate-tooling.github.io/v1alpha1
 kind: SubstrateInstall
 metadata:
   name: substrate

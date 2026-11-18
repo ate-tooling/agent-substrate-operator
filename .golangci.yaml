@@ -27,4 +27,4 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/samueltorres/agent-substrate-operator
+        - github.com/ate-tooling/agent-substrate-operator

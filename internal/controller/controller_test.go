@@ -21,9 +21,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
-	"github.com/samueltorres/agent-substrate-operator/internal/pki"
-	"github.com/samueltorres/agent-substrate-operator/internal/render"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/internal/pki"
+	"github.com/ate-tooling/agent-substrate-operator/internal/render"
 )
 
 var testClient client.Client

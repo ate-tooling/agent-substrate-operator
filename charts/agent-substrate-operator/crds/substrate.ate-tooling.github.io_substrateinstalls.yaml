@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.1
-  name: substrateinstalls.substrate.samueltorres.github.io
+  name: substrateinstalls.substrate.ate-tooling.github.io
 spec:
-  group: substrate.samueltorres.github.io
+  group: substrate.ate-tooling.github.io
   names:
     kind: SubstrateInstall
     listKind: SubstrateInstallList
@@ -256,7 +256,7 @@ spec:
                       Repository holds every component image, named as upstream's
                       `ate-setup publish release-images` publishes them, e.g.
                       registry.example.com/substrate/ateapi. Defaults to
-                      ghcr.io/samueltorres/substrate, where this project's CI publishes
+                      ghcr.io/ate-tooling/substrate, where this project's CI publishes
                       rebuilds of each upstream release.
                     type: string
                   tag:

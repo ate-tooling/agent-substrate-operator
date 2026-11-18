@@ -13,7 +13,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/samueltorres/agent-substrate-operator/internal/render"
+	"github.com/ate-tooling/agent-substrate-operator/internal/render"
 )
 
 // fieldOwner is the server-side apply field manager.

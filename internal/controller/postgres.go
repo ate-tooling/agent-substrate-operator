@@ -13,7 +13,7 @@ import (
 	"k8s.io/client-go/tools/remotecommand"
 	"k8s.io/streaming/pkg/httpstream"
 
-	"github.com/samueltorres/agent-substrate-operator/internal/upstream"
+	"github.com/ate-tooling/agent-substrate-operator/internal/upstream"
 )
 
 // The bundled PostgreSQL pod and the identities upstream's

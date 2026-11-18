@@ -45,7 +45,7 @@ deleted.
   needs 1.37.
 - The Agent Substrate images. Upstream publishes none, so this project's CI
   rebuilds each embedded release from its upstream tag and publishes it,
-  signed, to `ghcr.io/samueltorres/substrate`. The operator uses those by
+  signed, to `ghcr.io/ate-tooling/substrate`. The operator uses those by
   default. To use your own registry, build them yourself and set
   `images.repository`:
 
@@ -60,7 +60,7 @@ deleted.
 ## Install
 
 ```bash
-helm install substrate-operator oci://ghcr.io/samueltorres/charts/agent-substrate-operator \
+helm install substrate-operator oci://ghcr.io/ate-tooling/charts/agent-substrate-operator \
   --version 0.0.1 --namespace substrate-operator --create-namespace
 
 kubectl apply -f examples/generic-s3.yaml
@@ -97,7 +97,7 @@ upstream's `install.ate.dev/v1alpha1` install document where one exists. See
 | Field | Default | Meaning |
 |---|---|---|
 | `platform` | `generic` | `generic`: any cluster; drops atelet's GKE-only image credential provider mounts. `gke`: keeps them, and adds Google Managed Prometheus monitoring. `eks`: points them at the ECR credential provider in `/etc/eks/image-credential-provider` on Amazon Linux 2023 nodes, so actor images pull from private ECR; atelet's pods do not start on nodes without it, such as Bottlerocket, which need `generic`. `kind`: upstream's kind overlay with rustfs, an OpenTelemetry collector, Jaeger and Prometheus. |
-| `images.repository` | `ghcr.io/samueltorres/substrate` | Registry path holding the component images. |
+| `images.repository` | `ghcr.io/ate-tooling/substrate` | Registry path holding the component images. |
 | `images.tag` | embedded release | Tag of every component image. |
 | `storage.backend` | `gcs` on gke, else `s3` | Where actor snapshots go. Leave `storage` unset on kind. |
 | `storage.snapshotLocation` | required; `gs://ate-snapshots/` on kind | Object-storage URI snapshots are stored under, e.g. `s3://BUCKET/PREFIX/`. |
@@ -146,9 +146,9 @@ CI publishes everything to ghcr, signed with cosign keyless signing:
 
 | Artifact | Where | Tags |
 |---|---|---|
-| Operator image | `ghcr.io/samueltorres/agent-substrate-operator` | `X.Y.Z` per release, `main` and `sha-…` per push to main |
-| Helm chart | `oci://ghcr.io/samueltorres/charts/agent-substrate-operator` | `X.Y.Z` per release |
-| Substrate images | `ghcr.io/samueltorres/substrate/<component>` | the upstream release, e.g. `v1.0.0` |
+| Operator image | `ghcr.io/ate-tooling/agent-substrate-operator` | `X.Y.Z` per release, `main` and `sha-…` per push to main |
+| Helm chart | `oci://ghcr.io/ate-tooling/charts/agent-substrate-operator` | `X.Y.Z` per release |
+| Substrate images | `ghcr.io/ate-tooling/substrate/<component>` | the upstream release, e.g. `v1.0.0` |
 
 The Substrate images are not official upstream builds. They are rebuilds of
 the upstream release tag, made by upstream's own `ate-setup publish
@@ -160,9 +160,9 @@ carries SBOM and provenance attestations.
 Verify a signature:
 
 ```bash
-cosign verify ghcr.io/samueltorres/agent-substrate-operator:0.0.1 \
+cosign verify ghcr.io/ate-tooling/agent-substrate-operator:0.0.1 \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
-  --certificate-identity-regexp '^https://github.com/samueltorres/agent-substrate-operator/\.github/workflows/'
+  --certificate-identity-regexp '^https://github.com/ate-tooling/agent-substrate-operator/\.github/workflows/'
 ```
 
 ### Cutting a release

@@ -1,8 +1,8 @@
 # Local development on a kind cluster made with upstream's
-# hack/create-kind-cluster.sh. The images come from ghcr.io/samueltorres/substrate;
+# hack/create-kind-cluster.sh. The images come from ghcr.io/ate-tooling/substrate;
 # to use your own build, push it to the kind registry and point images there:
 #   hack/publish-substrate-images.sh <upstream checkout> localhost:5001/substrate linux/arm64
-apiVersion: substrate.samueltorres.github.io/v1alpha1
+apiVersion: substrate.ate-tooling.github.io/v1alpha1
 kind: SubstrateInstall
 metadata:
   name: substrate

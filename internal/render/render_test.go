@@ -12,8 +12,8 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/yaml"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
-	"github.com/samueltorres/agent-substrate-operator/internal/upstream"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/internal/upstream"
 )
 
 func baseSpec() v1alpha1.SubstrateInstallSpec {

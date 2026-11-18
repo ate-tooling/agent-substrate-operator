@@ -1,7 +1,7 @@
 // Package v1alpha1 holds the SubstrateInstall API.
 //
 // +kubebuilder:object:generate=true
-// +groupName=substrate.samueltorres.github.io
+// +groupName=substrate.ate-tooling.github.io
 package v1alpha1
 
 import (
@@ -12,7 +12,7 @@ import (
 
 var (
 	// GroupVersion is the group and version of the SubstrateInstall API.
-	GroupVersion = schema.GroupVersion{Group: "substrate.samueltorres.github.io", Version: "v1alpha1"}
+	GroupVersion = schema.GroupVersion{Group: "substrate.ate-tooling.github.io", Version: "v1alpha1"}
 
 	// SchemeBuilder registers the API types with a scheme.
 	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)

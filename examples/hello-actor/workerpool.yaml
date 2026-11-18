@@ -14,7 +14,7 @@ metadata:
     workload: hello
 spec:
   replicas: 1
-  workerImage: ghcr.io/samueltorres/substrate/ateworker-gvisor:v1.0.0
+  workerImage: ghcr.io/ate-tooling/substrate/ateworker-gvisor:v1.0.0
   sandboxClasses:
   - name: gvisor
   template:

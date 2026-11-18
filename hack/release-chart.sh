@@ -5,7 +5,7 @@
 #
 #   hack/release-chart.sh <tag> <oci repository>
 #
-#   hack/release-chart.sh v0.0.1 oci://ghcr.io/samueltorres/charts
+#   hack/release-chart.sh v0.0.1 oci://ghcr.io/ate-tooling/charts
 #
 # The package is left in dist/, and the pushed reference is printed with its
 # digest, for signing.

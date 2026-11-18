@@ -5,7 +5,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
 )
 
 func TestManagedKindsCoverTheRender(t *testing.T) {

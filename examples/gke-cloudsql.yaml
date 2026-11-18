@@ -1,7 +1,7 @@
 # GKE with snapshots in GCS and the store on Cloud SQL, reached through the
 # Cloud SQL Auth Proxy with IAM database authentication. Provision the
 # cluster, bucket, and IAM grants with upstream's tools/setup-gcp first.
-apiVersion: substrate.samueltorres.github.io/v1alpha1
+apiVersion: substrate.ate-tooling.github.io/v1alpha1
 kind: SubstrateInstall
 metadata:
   name: substrate

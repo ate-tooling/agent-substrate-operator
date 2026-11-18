@@ -1,4 +1,4 @@
-module github.com/samueltorres/agent-substrate-operator
+module github.com/ate-tooling/agent-substrate-operator
 
 go 1.27.4
 

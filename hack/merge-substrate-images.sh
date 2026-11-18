@@ -46,7 +46,7 @@ for name in $(cut -d' ' -f1 <<<"${pairs}" | uniq); do
   done <<<"${pairs}"
   target="${repo}/${name}:${tag}"
   docker buildx imagetools create --tag "${target}" \
-    --annotation "index:org.opencontainers.image.source=https://github.com/samueltorres/agent-substrate-operator" \
+    --annotation "index:org.opencontainers.image.source=https://github.com/ate-tooling/agent-substrate-operator" \
     --annotation "index:org.opencontainers.image.url=https://github.com/agent-substrate/substrate/tree/${tag}" \
     --annotation "index:org.opencontainers.image.version=${tag}" \
     --annotation "index:org.opencontainers.image.licenses=Apache-2.0" \

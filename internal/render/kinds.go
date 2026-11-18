@@ -8,7 +8,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	"github.com/samueltorres/agent-substrate-operator/internal/upstream"
+	"github.com/ate-tooling/agent-substrate-operator/internal/upstream"
 )
 
 // ManagedKinds lists every kind of object any variant of the install can

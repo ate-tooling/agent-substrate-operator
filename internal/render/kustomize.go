@@ -10,7 +10,7 @@ import (
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/filesys"
 
-	"github.com/samueltorres/agent-substrate-operator/internal/upstream"
+	"github.com/ate-tooling/agent-substrate-operator/internal/upstream"
 )
 
 // srcRoot is where the embedded upstream tree sits in the in-memory

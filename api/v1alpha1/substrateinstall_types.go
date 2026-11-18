@@ -135,7 +135,7 @@ type ImagesSpec struct {
 	// Repository holds every component image, named as upstream's
 	// `ate-setup publish release-images` publishes them, e.g.
 	// registry.example.com/substrate/ateapi. Defaults to
-	// ghcr.io/samueltorres/substrate, where this project's CI publishes
+	// ghcr.io/ate-tooling/substrate, where this project's CI publishes
 	// rebuilds of each upstream release.
 	// +optional
 	Repository string `json:"repository,omitempty"`

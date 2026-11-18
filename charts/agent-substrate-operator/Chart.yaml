@@ -6,9 +6,9 @@ type: application
 version: 0.0.0
 # The operator embeds and installs this Agent Substrate release.
 appVersion: v1.0.0
-home: https://github.com/samueltorres/agent-substrate-operator
+home: https://github.com/ate-tooling/agent-substrate-operator
 sources:
-  - https://github.com/samueltorres/agent-substrate-operator
+  - https://github.com/ate-tooling/agent-substrate-operator
   - https://github.com/agent-substrate/substrate
 keywords:
   - agent-substrate

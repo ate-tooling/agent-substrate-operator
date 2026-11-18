@@ -18,10 +18,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
-	"github.com/samueltorres/agent-substrate-operator/internal/controller"
-	"github.com/samueltorres/agent-substrate-operator/internal/render"
-	"github.com/samueltorres/agent-substrate-operator/internal/upstream"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/internal/controller"
+	"github.com/ate-tooling/agent-substrate-operator/internal/render"
+	"github.com/ate-tooling/agent-substrate-operator/internal/upstream"
 )
 
 func main() {
@@ -55,7 +55,7 @@ func main() {
 		Metrics:                metricsserver.Options{BindAddress: metricsAddr},
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         leaderElect,
-		LeaderElectionID:       "agent-substrate-operator.substrate.samueltorres.github.io",
+		LeaderElectionID:       "agent-substrate-operator.substrate.ate-tooling.github.io",
 		Cache: cache.Options{ByObject: map[client.Object]cache.ByObject{
 			&appsv1.Deployment{}:  installed,
 			&appsv1.DaemonSet{}:   installed,

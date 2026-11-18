@@ -4,7 +4,7 @@ ACTIONLINT ?= go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
 GOVULNCHECK ?= go run golang.org/x/vuln/cmd/govulncheck@v1.8.0
 SHELLCHECK ?= $(shell command -v shellcheck 2>/dev/null || echo docker run --rm -v "$(CURDIR):/mnt" -w /mnt koalaman/shellcheck:v0.11.0@sha256:61862eba1fcf09a484ebcc6feea46f1782532571a34ed51fedf90dd25f925a8d)
 CHART := charts/agent-substrate-operator
-IMG ?= ghcr.io/samueltorres/agent-substrate-operator:dev
+IMG ?= ghcr.io/ate-tooling/agent-substrate-operator:dev
 
 .PHONY: generate
 generate: ## Regenerate deepcopy code, the CRD, and the operator's RBAC.

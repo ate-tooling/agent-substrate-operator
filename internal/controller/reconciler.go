@@ -23,13 +23,13 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	"github.com/samueltorres/agent-substrate-operator/api/v1alpha1"
-	"github.com/samueltorres/agent-substrate-operator/internal/render"
-	"github.com/samueltorres/agent-substrate-operator/internal/upstream"
+	"github.com/ate-tooling/agent-substrate-operator/api/v1alpha1"
+	"github.com/ate-tooling/agent-substrate-operator/internal/render"
+	"github.com/ate-tooling/agent-substrate-operator/internal/upstream"
 )
 
 // finalizer holds the SubstrateInstall until teardown has finished.
-const finalizer = "substrate.samueltorres.github.io/teardown"
+const finalizer = "substrate.ate-tooling.github.io/teardown"
 
 const (
 	// waitInterval is how soon to look again while a step waits on the
@@ -52,8 +52,8 @@ type Reconciler struct {
 	Exec      PodExecutor
 }
 
-// +kubebuilder:rbac:groups=substrate.samueltorres.github.io,resources=substrateinstalls,verbs=get;list;watch;update;patch
-// +kubebuilder:rbac:groups=substrate.samueltorres.github.io,resources=substrateinstalls/status;substrateinstalls/finalizers,verbs=get;update;patch
+// +kubebuilder:rbac:groups=substrate.ate-tooling.github.io,resources=substrateinstalls,verbs=get;list;watch;update;patch
+// +kubebuilder:rbac:groups=substrate.ate-tooling.github.io,resources=substrateinstalls/status;substrateinstalls/finalizers,verbs=get;update;patch
 // +kubebuilder:rbac:groups="",resources=namespaces;configmaps;secrets;services;serviceaccounts;persistentvolumeclaims;resourcequotas,verbs=*
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;watch
 // +kubebuilder:rbac:groups="",resources=pods/exec,verbs=get;create

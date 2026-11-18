@@ -114,7 +114,7 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - substrate.samueltorres.github.io
+  - substrate.ate-tooling.github.io
   resources:
   - substrateinstalls
   verbs:
@@ -124,7 +124,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - substrate.samueltorres.github.io
+  - substrate.ate-tooling.github.io
   resources:
   - substrateinstalls/finalizers
   - substrateinstalls/status

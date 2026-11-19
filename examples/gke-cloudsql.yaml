@@ -1,6 +1,7 @@
 # GKE with snapshots in GCS and the store on Cloud SQL, reached through the
 # Cloud SQL Auth Proxy with IAM database authentication. Provision the
-# cluster, bucket, and IAM grants with upstream's tools/setup-gcp first.
+# cluster, bucket, and IAM grants with tools/setup-gcp from
+# https://github.com/ai-on-gke/substrate-gke first.
 apiVersion: substrate.ate-tooling.github.io/v1alpha1
 kind: SubstrateInstall
 metadata:
@@ -13,8 +14,8 @@ spec:
     clusterName: substrate
   storage:
     snapshotLocation: gs://my-project-ate-snapshots/
-    # Created by tools/setup-gcp; ate-api-server impersonates it to hand
-    # atelet tokens scoped to one actor's snapshots.
+    # Created by substrate-gke's tools/setup-gcp; ate-api-server
+    # impersonates it to hand atelet tokens scoped to one actor's snapshots.
     transferServiceAccount: ate-snapshot-transfer@my-project.iam.gserviceaccount.com
   postgres:
     cloudSQL:

@@ -41,8 +41,9 @@ deleted.
   `ClusterTrustBundle`, `ClusterTrustBundleProjection` and
   `PodCertificateRequest` feature gates on and `certificates.k8s.io/v1beta1`
   served. On GKE these can only be enabled when the cluster is created (see
-  upstream's `tools/setup-gcp`). EKS does not expose feature gates, so it
-  needs 1.37.
+  `tools/setup-gcp` in
+  [substrate-gke](https://github.com/ai-on-gke/substrate-gke/tree/main/tools/setup-gcp)).
+  EKS does not expose feature gates, so it needs 1.37.
 - The Agent Substrate images. Upstream publishes none, so this project's CI
   rebuilds each embedded release from its upstream tag and publishes it,
   signed, to `ghcr.io/ate-tooling/substrate`. The operator uses those by

@@ -3,7 +3,7 @@
 # script at a release tag into internal/upstream, where the operator embeds
 # them.
 #
-#   hack/sync-upstream.sh ~/src/github.com/agent-substrate/substrate v1.0.0
+#   hack/sync-upstream.sh ~/src/github.com/agent-substrate/substrate v1.0.1
 
 set -o errexit -o nounset -o pipefail
 

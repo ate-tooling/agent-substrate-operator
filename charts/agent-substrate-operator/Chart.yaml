@@ -5,7 +5,7 @@ type: application
 # Set from the release tag when the chart is packaged; see hack/release-chart.sh.
 version: 0.0.0
 # The operator embeds and installs this Agent Substrate release.
-appVersion: v1.0.0
+appVersion: v1.0.1
 home: https://github.com/ate-tooling/agent-substrate-operator
 sources:
   - https://github.com/ate-tooling/agent-substrate-operator

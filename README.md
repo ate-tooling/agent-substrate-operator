@@ -9,7 +9,7 @@ The operator applies the upstream manifests in the order upstream's installer
 in the resource's status. It keeps the install in that state afterwards.
 
 Each operator release embeds one Agent Substrate release. This one installs
-**v1.0.0**.
+**v1.0.1**.
 
 Upstream does not support upgrading a 0.x install to 1.0; reinstall instead.
 
@@ -134,7 +134,7 @@ Only the Envoy dataplane is supported. agentgateway is not yet.
 ```console
 $ kubectl get substrateinstall
 NAME        VERSION   READY   STEP       AGE
-substrate   v1.0.0    True    Ready      6m
+substrate   v1.0.1    True    Ready      6m
 ```
 
 While it works, `status.step` names the step and the `Progressing` condition
@@ -149,7 +149,7 @@ CI publishes everything to ghcr, signed with cosign keyless signing:
 |---|---|---|
 | Operator image | `ghcr.io/ate-tooling/agent-substrate-operator` | `X.Y.Z` per release, `main` and `sha-…` per push to main |
 | Helm chart | `oci://ghcr.io/ate-tooling/charts/agent-substrate-operator` | `X.Y.Z` per release |
-| Substrate images | `ghcr.io/ate-tooling/substrate/<component>` | the upstream release, e.g. `v1.0.0` |
+| Substrate images | `ghcr.io/ate-tooling/substrate/<component>` | the upstream release, e.g. `v1.0.1` |
 
 The Substrate images are not official upstream builds. They are rebuilds of
 the upstream release tag, made by upstream's own `ate-setup publish

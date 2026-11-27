@@ -9,7 +9,7 @@
 # The cluster is made with hack/create-kind-cluster.sh, copied from upstream,
 # with the feature gates Substrate needs and a registry on localhost:5001.
 # Substrate's images come from SUBSTRATE_IMAGES (default
-# ghcr.io/ate-tooling/substrate); if that repository has no images for the
+# ghcr.io/agent-substrate/substrate); if that repository has no images for the
 # release, they are built into the kind registry instead.
 #
 # Environment:
@@ -30,7 +30,7 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 version="$(cat "${root}/internal/upstream/files/VERSION")"
 cluster="${KIND_CLUSTER_NAME:-substrate-e2e}"
 context="kind-${cluster}"
-images="${SUBSTRATE_IMAGES:-ghcr.io/ate-tooling/substrate}"
+images="${SUBSTRATE_IMAGES:-ghcr.io/agent-substrate/substrate}"
 registry="localhost:5001"
 operator_image="${registry}/agent-substrate-operator:e2e"
 arch="$(go env GOARCH)"

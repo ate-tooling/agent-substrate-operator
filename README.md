@@ -43,11 +43,9 @@ deleted.
   served. On GKE these can only be enabled when the cluster is created (see
   upstream's `tools/setup-gcp`). EKS does not expose feature gates, so it
   needs 1.37.
-- The Agent Substrate images. Upstream publishes none, so this project's CI
-  rebuilds each embedded release from its upstream tag and publishes it,
-  signed, to `ghcr.io/ate-tooling/substrate`. The operator uses those by
-  default. To use your own registry, build them yourself and set
-  `images.repository`:
+- Access to the Agent Substrate images. The operator uses upstream's, at
+  `ghcr.io/agent-substrate/substrate`, by default. To use your own registry,
+  copy them there or build them yourself, and set `images.repository`:
 
   ```bash
   hack/publish-substrate-images.sh ~/src/github.com/agent-substrate/substrate \
@@ -97,7 +95,7 @@ upstream's `install.ate.dev/v1alpha1` install document where one exists. See
 | Field | Default | Meaning |
 |---|---|---|
 | `platform` | `generic` | `generic`: any cluster; drops atelet's GKE-only image credential provider mounts. `gke`: keeps them, and adds Google Managed Prometheus monitoring. `eks`: points them at the ECR credential provider in `/etc/eks/image-credential-provider` on Amazon Linux 2023 nodes, so actor images pull from private ECR; atelet's pods do not start on nodes without it, such as Bottlerocket, which need `generic`. `kind`: upstream's kind overlay with rustfs, an OpenTelemetry collector, Jaeger and Prometheus. |
-| `images.repository` | `ghcr.io/ate-tooling/substrate` | Registry path holding the component images. |
+| `images.repository` | `ghcr.io/agent-substrate/substrate` | Registry path holding the component images. |
 | `images.tag` | embedded release | Tag of every component image. |
 | `storage.backend` | `gcs` on gke, else `s3` | Where actor snapshots go. Leave `storage` unset on kind. |
 | `storage.snapshotLocation` | required; `gs://ate-snapshots/` on kind | Object-storage URI snapshots are stored under, e.g. `s3://BUCKET/PREFIX/`. |
@@ -149,14 +147,10 @@ CI publishes everything to ghcr, signed with cosign keyless signing:
 |---|---|---|
 | Operator image | `ghcr.io/ate-tooling/agent-substrate-operator` | `X.Y.Z` per release, `main` and `sha-…` per push to main |
 | Helm chart | `oci://ghcr.io/ate-tooling/charts/agent-substrate-operator` | `X.Y.Z` per release |
-| Substrate images | `ghcr.io/ate-tooling/substrate/<component>` | the upstream release, e.g. `v1.0.1` |
 
-The Substrate images are not official upstream builds. They are rebuilds of
-the upstream release tag, made by upstream's own `ate-setup publish
-release-images` on a native runner per architecture
-([`substrate-images.yaml`](.github/workflows/substrate-images.yaml)). They
-are published once per release and never overwritten. The operator image
-carries SBOM and provenance attestations.
+The operator image carries SBOM and provenance attestations. The Substrate
+images are upstream's own, `ghcr.io/agent-substrate/substrate/<component>`
+tagged with the release, e.g. `v1.0.1`; this project does not publish them.
 
 Verify a signature:
 

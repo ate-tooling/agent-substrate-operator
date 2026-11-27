@@ -37,9 +37,9 @@ const (
 	AnnotationConfigHash = "substrate.ate-tooling.github.io/config-hash"
 )
 
-// DefaultImageRepository is where this project's CI publishes the Substrate
-// images: rebuilds of the embedded upstream release, which publishes none.
-const DefaultImageRepository = "ghcr.io/ate-tooling/substrate"
+// DefaultImageRepository is where upstream publishes the images of each
+// Substrate release.
+const DefaultImageRepository = "ghcr.io/agent-substrate/substrate"
 
 // DefaultActorJWTIssuer is upstream's default iss claim for actor JWTs, the
 // in-cluster address of ate-idp-server's Service.

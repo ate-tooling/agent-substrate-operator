@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Builds the Agent Substrate release the operator embeds and pushes its images
 # to a registry, where a SubstrateInstall's images.repository points. Upstream
-# publishes no images, so an install needs this once per release. It uses
+# publishes its own at ghcr.io/agent-substrate/substrate; this is for a
+# private registry, or to run a build of your own. It uses
 # upstream's own `ate-setup publish release-images`, which needs Go and Docker.
 #
 #   hack/publish-substrate-images.sh <upstream checkout> <registry/repository> [platforms]
